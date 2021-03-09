@@ -6,17 +6,238 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>450</width>
     <height>600</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
+  <property name="maximumSize">
+   <size>
+    <width>450</width>
+    <height>600</height>
+   </size>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar"/>
+  <property name="windowTitle">
+   <string>N Tiles Puzzle</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/images/resources/images/puzzle.png</normaloff>:/images/resources/images/puzzle.png</iconset>
+  </property>
+  <widget class="QWidget" name="mainWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <spacer name="verticalSpacer_5">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <layout class="QVBoxLayout" name="logoVLayout">
+      <item>
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="titleLabel">
+        <property name="font">
+         <font>
+          <family>Segoe UI Black</family>
+          <pointsize>28</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>N-TILES PUZZLE</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="logoLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="../resources.qrc">:/images/resources/images/logo.jpg</pixmap>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>10</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="buttonsHLayout">
+      <item>
+       <spacer name="btnLeftSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="buttonsVLayout">
+        <item>
+         <widget class="QPushButton" name="newButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Start New Game</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="loadButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Load Game</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="aboutButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>About</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="howButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>How To Play</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="btnRightSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="3" column="0">
+     <spacer name="verticalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
