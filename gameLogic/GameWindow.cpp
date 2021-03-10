@@ -75,7 +75,7 @@ void GameWindow::createButtons() const
         int tile = m_puzzleLogic->currentState().getTile(index);
         QString text = QString::number(tile);
         button->setText((tile == 0) ? "" : text);
-        button->setFlat(button->text() == text);
+        button->setFlat(button->text() == "");
 
         QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui->puzzleGroupBox->layout());
 
