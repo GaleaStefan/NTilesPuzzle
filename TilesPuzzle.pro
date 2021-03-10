@@ -9,15 +9,24 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    gameLogic/GameWindow.cpp \
+    gameLogic/PuzzleLogic.cpp \
+    gameLogic/PuzzleState.cpp \
+    handler/SaveFile.cpp \
     levels/LevelDialog.cpp \
     main.cpp \
     main/MainWindow.cpp
 
 HEADERS += \
+    gameLogic/GameWindow.h \
+    gameLogic/PuzzleLogic.h \
+    gameLogic/PuzzleState.h \
+    handler/SaveFile.h \
     levels/LevelDialog.h \
     main/MainWindow.h
 
 FORMS += \
+    gameLogic/GameWindow.ui \
     levels/LevelDialog.ui \
     main/MainWindow.ui
 

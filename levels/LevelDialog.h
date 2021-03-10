@@ -26,7 +26,6 @@ private slots:
     void onStartButtonPress();
 
 private:
-    bool isSaveNameValid(const QString&);
 };
 
 #endif // LEVELDIALOG_H

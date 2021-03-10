@@ -2,5 +2,8 @@
     <qresource prefix="/images">
         <file>resources/images/puzzle.png</file>
         <file>resources/images/logo.jpg</file>
+        <file>resources/images/lightbulb.png</file>
+        <file>resources/images/redo.png</file>
+        <file>resources/images/undo.png</file>
     </qresource>
 </RCC>

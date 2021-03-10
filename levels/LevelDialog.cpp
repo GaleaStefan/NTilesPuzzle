@@ -1,5 +1,7 @@
 #include "LevelDialog.h"
 #include "ui_LevelDialog.h"
+#include "../handler/SaveFile.h"
+#include "../main/MainWindow.h"
 
 LevelDialog::LevelDialog(QWidget *parent) :
     QDialog(parent),
@@ -46,16 +48,19 @@ void LevelDialog::onStartButtonPress()
     QString saveName = ui->lineEdit->displayText();
     int chosenLevel = m_btnLevels[m_currentLevel];
 
-    if(!isSaveNameValid(saveName))
+    if(!SaveFile::isNameValid(saveName))
     {
-        ui->errorsLabel->setText("Please insert a (valid) save name");
+        ui->errorsLabel->setText("Please insert a (valid) save name.\nAccepted characters:A-Z,a-z,0-9\n Min. name size: 3");
         return;
     }
 
-    qInfo() << saveName << chosenLevel;
+    if(SaveFile::saveExists(saveName))
+    {
+        ui->errorsLabel->setText("Save already exists");
+        return;
+    }
+
+    MainWindow* dialogParent = qobject_cast<MainWindow*>(this->parent());
+    dialogParent->startNewGame(saveName, chosenLevel);
 }
 
-bool LevelDialog::isSaveNameValid(const QString& saveName)
-{
-    return true;
-}
