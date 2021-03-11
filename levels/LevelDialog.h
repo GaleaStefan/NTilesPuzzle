@@ -16,16 +16,17 @@ public:
     explicit LevelDialog(QWidget *parent = nullptr);
     ~LevelDialog();
 
-private:
-    Ui::LevelDialog *ui;
-    QMap<QPushButton*, int> m_btnLevels;
-    QPushButton* m_currentLevel;
+signals:
+    void onInputValidation(const QString& saveName, int difficulty);
 
 private slots:
     void onLevelButtonPress();
     void onStartButtonPress();
 
 private:
+    Ui::LevelDialog*        ui;
+    QMap<QPushButton*, int> m_btnLevels;
+    QPushButton*            m_currentLevel;
 };
 
 #endif // LEVELDIALOG_H

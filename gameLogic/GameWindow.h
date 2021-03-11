@@ -4,7 +4,9 @@
 #include <QWidget>
 #include <QMap>
 #include <QPushButton>
+
 #include <utility>
+
 #include "PuzzleLogic.h"
 
 namespace Ui {
@@ -16,14 +18,16 @@ class GameWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit GameWindow(int difficulty, QWidget *parent = nullptr);
+    explicit GameWindow(const QString& saveName, int difficulty, QWidget *parent = nullptr);
     ~GameWindow();
 
-    void updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos) const;
+signals:
+    void tileClickSignal(int index) const;
 
-private:
-    Ui::GameWindow *ui;
-    PuzzleLogic* m_puzzleLogic;
+public slots:
+    void updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos, int moves, bool finished) const;
+    void updateMoves(unsigned moves) const;
+    void onGameFinish();
 
 private:
     void setupUiSizes();
@@ -31,6 +35,10 @@ private:
 
 private slots:
     void onTileButtonClick(unsigned index) const;
+
+private:
+    Ui::GameWindow* ui;
+    PuzzleLogic*    m_puzzleLogic;
 };
 
 #endif // GAMEWINDOW_H

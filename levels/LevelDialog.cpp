@@ -1,14 +1,17 @@
 #include "LevelDialog.h"
 #include "ui_LevelDialog.h"
+
 #include "../handler/SaveFile.h"
 #include "../main/MainWindow.h"
 
 LevelDialog::LevelDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::LevelDialog),
-    m_currentLevel(nullptr)
+    ui(new Ui::LevelDialog)
 {
     ui->setupUi(this);
+
+    m_currentLevel = ui->easyButton;
+    m_currentLevel->setEnabled(false);
 
     m_btnLevels = {{ui->easyButton, 1},
                    {ui->mediumButton, 2},
@@ -19,6 +22,9 @@ LevelDialog::LevelDialog(QWidget *parent) :
     connect(ui->hardButton, &QPushButton::pressed, this, &LevelDialog::onLevelButtonPress);
     connect(ui->cancelButton, &QPushButton::pressed, this, &LevelDialog::close);
     connect(ui->startButton, &QPushButton::pressed, this, &LevelDialog::onStartButtonPress);
+
+    MainWindow* mainWindow = qobject_cast<MainWindow*>(parent);
+    connect(this, &LevelDialog::onInputValidation, mainWindow, &MainWindow::createNewGame);
 }
 
 LevelDialog::~LevelDialog()
@@ -28,10 +34,7 @@ LevelDialog::~LevelDialog()
 
 void LevelDialog::onLevelButtonPress()
 {
-    if(m_currentLevel != nullptr)
-    {
-        m_currentLevel->setEnabled(true);
-    }
+    m_currentLevel->setEnabled(true);
 
     m_currentLevel = qobject_cast<QPushButton*>(sender());
     m_currentLevel->setEnabled(false);
@@ -39,12 +42,6 @@ void LevelDialog::onLevelButtonPress()
 
 void LevelDialog::onStartButtonPress()
 {
-    if(m_currentLevel == nullptr)
-    {
-        ui->errorsLabel->setText("Please choose a difficulty");
-        return;
-    }
-
     QString saveName = ui->lineEdit->displayText();
     int chosenLevel = m_btnLevels[m_currentLevel];
 
@@ -60,7 +57,5 @@ void LevelDialog::onStartButtonPress()
         return;
     }
 
-    MainWindow* dialogParent = qobject_cast<MainWindow*>(this->parent());
-    dialogParent->startNewGame(saveName, chosenLevel);
+    emit onInputValidation(saveName, chosenLevel);
 }
-

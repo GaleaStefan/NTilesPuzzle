@@ -11,27 +11,27 @@ public:
     PuzzleState(unsigned matSize);
     PuzzleState(unsigned matSize, const std::vector<unsigned>& configuration);
 
-    static PuzzleState generateRandomState(unsigned matSize);
+    static PuzzleState              generateRandomState(unsigned matSize);
 
-    std::vector<unsigned> getState() const;
-    void setState(const std::vector<unsigned>& configuration);
+    std::vector<unsigned>           getState() const;
+    unsigned                        getTile(unsigned index) const;
+    unsigned                        getIndex(unsigned tile) const;
+    std::pair<unsigned, unsigned>   getGridFromArray(unsigned arrayIndex) const;
+    std::pair<unsigned, unsigned>   getGridFromTile(unsigned tile) const;
 
-    void swapTiles(unsigned index1, unsigned index2);
-    std::pair<unsigned, unsigned> attemptMove(unsigned index, bool& succes);
-    unsigned getTile(unsigned index) const;
+    void                            setState(const std::vector<unsigned>& configuration);
+    void                            swapTiles(unsigned index1, unsigned index2);
+    std::pair<unsigned, unsigned>   attemptMove(unsigned index, bool& succes);
 
-    std::pair<unsigned, unsigned> getGridFromArray(unsigned arrayIndex) const;
-    std::pair<unsigned, unsigned> getGridFromTile(unsigned tile) const;
-    unsigned getIndex(unsigned tile) const;
-
-private:
-    unsigned m_matrixSize;
-    std::vector<unsigned> m_tiles;
+    bool                            isGoalState() const;
+    bool                            isSolvable() const;
 
 private:
+    unsigned                        calculateInversions() const;
 
-    bool isSolvable() const;
-    unsigned calculateInversions() const;
+private:
+    unsigned                m_matrixSize;
+    std::vector<unsigned>   m_tiles;
 };
 
 #endif // PUZZLESTATE_H

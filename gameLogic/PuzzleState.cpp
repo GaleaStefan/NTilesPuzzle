@@ -1,8 +1,10 @@
 #include "PuzzleState.h"
+
+#include <QDebug>
+
 #include <random>
 #include <map>
 #include <assert.h>
-#include <QDebug>
 
 PuzzleState::PuzzleState()
 {
@@ -25,6 +27,10 @@ PuzzleState PuzzleState::generateRandomState(unsigned matSize)
 {
     PuzzleState randomState;
 
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<unsigned> distance(0, matSize * matSize - 1);
+
     do
     {
         std::map<unsigned, bool> usedTiles;
@@ -32,9 +38,6 @@ PuzzleState PuzzleState::generateRandomState(unsigned matSize)
 
         for(unsigned tileIndex = 0; tileIndex < matSize * matSize; tileIndex++)
         {
-            std::random_device rd;
-            std::mt19937 mt(rd());
-            std::uniform_int_distribution<unsigned> distance(0, matSize * matSize - 1);
             unsigned tile;
 
             do
@@ -55,31 +58,34 @@ PuzzleState PuzzleState::generateRandomState(unsigned matSize)
 bool PuzzleState::isSolvable() const
 {
     unsigned inversions = this->calculateInversions();
+    unsigned emptyBackwardRow = m_matrixSize - this->getGridFromTile(0).first;
 
-    if(m_matrixSize & 1)
+
+    if(m_matrixSize % 2 == 1)
     {
-        return !(inversions & 1);
+        return (inversions % 2 == 0);
     }
-
-    int emptyBackwardRow = m_matrixSize - this->getGridFromTile(0).first;
-
-    if(emptyBackwardRow & 1)
+    else
     {
-        return !(inversions & 1);
+        bool blankOnOdd = (emptyBackwardRow % 2 == 1);
+        return (blankOnOdd == (inversions % 2 == 0));
     }
-
-    return inversions & 1;
 }
 
 unsigned PuzzleState::calculateInversions() const
 {
     unsigned inversions = 0;
 
-    for(unsigned first = 0; first < m_tiles.size(); first++)
+    for(unsigned first = 0; first < m_tiles.size() - 1; first++)
     {
-        for(unsigned second = 0; second < m_tiles.size(); second++)
+        if(m_tiles[first] == 0)
         {
-            if(m_tiles[first] > m_tiles[second])
+            continue;
+        }
+
+        for(unsigned second = first + 1; second < m_tiles.size(); second++)
+        {
+            if(m_tiles[second] && m_tiles[first] > m_tiles[second])
             {
                 inversions++;
             }
@@ -111,6 +117,19 @@ unsigned PuzzleState::getIndex(unsigned tile) const
 
     assert("Error finding tile index");
     return 0;
+}
+
+bool PuzzleState::isGoalState() const
+{
+    for(unsigned index = 0; index < m_matrixSize * m_matrixSize - 1; index++)
+    {
+        if(m_tiles[index] != index + 1)
+        {
+            return false;
+        }
+    }
+
+    return m_tiles[m_matrixSize * m_matrixSize] == 0;
 }
 
 std::vector<unsigned> PuzzleState::getState() const
@@ -147,7 +166,8 @@ std::pair<unsigned, unsigned> PuzzleState::attemptMove(unsigned index, bool &suc
         std::pair<int, int> nextPosition = {currentPosition.first + neighbours[neighbour].first,
                                             currentPosition.second + neighbours[neighbour].second};
 
-        if(nextPosition.first >= 0 && nextPosition.first < (int)m_matrixSize && nextPosition.second >= 0 && nextPosition.second < (int)m_matrixSize)
+        if(nextPosition.first >= 0 && nextPosition.first < (int)m_matrixSize &&
+           nextPosition.second >= 0 && nextPosition.second < (int)m_matrixSize)
         {
             if(getTile((unsigned)nextPosition.first * m_matrixSize + nextPosition.second) == 0)
             {

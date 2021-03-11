@@ -4,17 +4,19 @@
 #include <QString>
 #include <QFile>
 
+#include "JsonFile.h"
 
-class SaveFile
+class SaveFile : public JsonFile
 {
 public:
     SaveFile();
-    SaveFile(const QString& newSaveName);
+    SaveFile(const QString& saveName);
 
     static bool saveExists(const QString& name);
     static bool isNameValid(const QString& name);
+
 private:
-    QFile m_file;
+
 };
 
 #endif // SAVEFILE_H

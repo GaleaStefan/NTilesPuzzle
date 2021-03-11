@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+
 #include "handler/SaveFile.h"
 #include "gameLogic/PuzzleState.h"
 
@@ -10,13 +11,14 @@ MainWindow::MainWindow(QWidget *parent)
     , m_gameWindow(nullptr)
 {
     ui->setupUi(this);
-
     connect(ui->newButton, &QPushButton::pressed, this, &MainWindow::onNewBtnPress);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete m_levelSelector;
+    delete m_gameWindow;
 }
 
 void MainWindow::onNewBtnPress()
@@ -31,7 +33,7 @@ void MainWindow::onNewBtnPress()
     m_levelSelector = nullptr;
 }
 
-void MainWindow::startNewGame(const QString &saveFileName, int difficulty)
+void MainWindow::createNewGame(const QString &saveName, int difficulty)
 {
     assert(m_gameWindow == nullptr);
     assert(m_levelSelector != nullptr);
@@ -41,7 +43,6 @@ void MainWindow::startNewGame(const QString &saveFileName, int difficulty)
 
     this->hide();
 
-    m_gameWindow = new GameWindow(difficulty);
+    m_gameWindow = new GameWindow(saveName, difficulty);
     m_gameWindow->show();
 }
-

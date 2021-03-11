@@ -7,20 +7,20 @@ PuzzleLogic::PuzzleLogic() :
 {
 }
 
-PuzzleLogic::PuzzleLogic(QWidget* parentWindow) :
-    m_moves(0),
-    m_hints(0),
-    m_currentGame(parentWindow)
-{
-}
-
-PuzzleLogic::PuzzleLogic(QWidget* parentWindow, unsigned grid) :
+PuzzleLogic::PuzzleLogic(QWidget* parentWindow, unsigned grid, const QString& saveName) :
     m_gridSize(grid),
     m_moves(0),
     m_hints(0),
     m_currentState(PuzzleState::generateRandomState(grid)),
-    m_currentGame(parentWindow)
+    m_currentGame(parentWindow),
+    m_saveFile(new SaveFile(saveName))
 {
+    setupConnections();
+}
+
+PuzzleLogic::~PuzzleLogic()
+{
+    delete m_saveFile;
 }
 
 unsigned PuzzleLogic::gridSize() const
@@ -43,7 +43,7 @@ void PuzzleLogic::setCurrentState(const PuzzleState &currentState)
     m_currentState = currentState;
 }
 
-void PuzzleLogic::handleTilePress(unsigned tileIndex)
+void PuzzleLogic::onGameTilePress(unsigned tileIndex)
 {
     if(m_currentState.getTile(tileIndex) == 0)
     {
@@ -57,10 +57,17 @@ void PuzzleLogic::handleTilePress(unsigned tileIndex)
     {
         PuzzleState newState(m_currentState);
         newState.swapTiles(tileIndex, newPosition.first * m_gridSize + newPosition.second);
+        m_currentState = newState;
+        m_moves++;
 
-        this->m_currentState = newState;
-
-        GameWindow* window = qobject_cast<GameWindow*>(m_currentGame);
-        window->updatePuzzleTiles(m_currentState.getGridFromArray(tileIndex), newPosition);
+        std::pair<unsigned, unsigned> oldPosition = m_currentState.getGridFromArray(tileIndex);
+        emit tileMovedSignal(oldPosition, newPosition, m_moves, m_currentState.isGoalState());
     }
+}
+
+void PuzzleLogic::setupConnections() const
+{
+    GameWindow* currentGame = qobject_cast<GameWindow*>(m_currentGame);
+    connect(this, &PuzzleLogic::tileMovedSignal, currentGame, &GameWindow::updatePuzzleTiles);
+    connect(this, &PuzzleLogic::gameFinish, currentGame, &GameWindow::onGameFinish);
 }

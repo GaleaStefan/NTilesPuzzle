@@ -5,14 +5,16 @@
 #define TILE_SPACE 8
 #define GROUP_BOX_OFFSET 16
 
-GameWindow::GameWindow(int difficulty, QWidget *parent) :
+GameWindow::GameWindow(const QString& saveName, int difficulty, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameWindow),
-    m_puzzleLogic(new PuzzleLogic(this, difficulty + 2))
+    m_puzzleLogic(new PuzzleLogic(this, difficulty + 2, saveName))
 {
     ui->setupUi(this);
     setupUiSizes();
     createButtons();
+
+    connect(this, &GameWindow::tileClickSignal, m_puzzleLogic, &PuzzleLogic::onGameTilePress);
 }
 
 GameWindow::~GameWindow()
@@ -21,7 +23,7 @@ GameWindow::~GameWindow()
     delete m_puzzleLogic;
 }
 
-void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos) const
+void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos, int moves, bool finished) const
 {
     QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui->puzzleGroupBox->layout());
 
@@ -33,6 +35,14 @@ void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::p
 
     gridLayout->addWidget(pressed, emptyPos.first, emptyPos.second);
     gridLayout->addWidget(empty, tilePos.first, tilePos.second);
+
+    updateMoves(moves);
+
+    if(finished)
+    {
+        qInfo() << "FINISHED";
+        return;
+    }
 
     int emptyIndex = emptyPos.first * m_puzzleLogic->gridSize() + emptyPos.second;
     connect(pressed, &QPushButton::clicked,
@@ -49,6 +59,16 @@ void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::p
                 onTileButtonClick(pressedIndex);
             }
     );
+}
+
+void GameWindow::updateMoves(unsigned moves) const
+{
+    ui->movesCount->setText(QString::number(moves));
+}
+
+void GameWindow::onGameFinish()
+{
+
 }
 
 void GameWindow::setupUiSizes()
@@ -94,5 +114,5 @@ void GameWindow::createButtons() const
 
 void GameWindow::onTileButtonClick(unsigned buttonIndex) const
 {
-    m_puzzleLogic->handleTilePress(buttonIndex);
+    emit tileClickSignal(buttonIndex);
 }

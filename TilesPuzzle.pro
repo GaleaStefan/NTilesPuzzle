@@ -12,6 +12,7 @@ SOURCES += \
     gameLogic/GameWindow.cpp \
     gameLogic/PuzzleLogic.cpp \
     gameLogic/PuzzleState.cpp \
+    handler/JsonFile.cpp \
     handler/SaveFile.cpp \
     levels/LevelDialog.cpp \
     main.cpp \
@@ -21,6 +22,7 @@ HEADERS += \
     gameLogic/GameWindow.h \
     gameLogic/PuzzleLogic.h \
     gameLogic/PuzzleState.h \
+    handler/JsonFile.h \
     handler/SaveFile.h \
     levels/LevelDialog.h \
     main/MainWindow.h

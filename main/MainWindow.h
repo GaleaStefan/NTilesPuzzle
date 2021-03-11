@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
 #include "levels/LevelDialog.h"
 #include "gameLogic/GameWindow.h"
 
@@ -17,12 +18,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void startNewGame(const QString& saveFileName, int difficulty);
+public slots:
+    void createNewGame(const QString& saveName, int difficulty);
 
-private:
-    Ui::MainWindow *ui;
-    LevelDialog *m_levelSelector;
-    GameWindow *m_gameWindow;
 private slots:
     void onNewBtnPress();
     //void onLoadBtnPress();
@@ -30,6 +28,9 @@ private slots:
     //void onHowBtnPress();
 
 private:
+    Ui::MainWindow *ui;
+    LevelDialog *m_levelSelector;
+    GameWindow *m_gameWindow;
 
 };
 #endif // MAINWINDOW_H
