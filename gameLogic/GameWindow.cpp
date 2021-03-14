@@ -5,16 +5,22 @@
 #define TILE_SPACE 8
 #define GROUP_BOX_OFFSET 16
 
-GameWindow::GameWindow(const QString& saveName, int difficulty, QWidget *parent) :
-    QWidget(parent),
+GameWindow::GameWindow(const QString& saveName, int difficulty, QWidget* mainWindow) :
     ui(new Ui::GameWindow),
-    m_puzzleLogic(new PuzzleLogic(this, difficulty + 2, saveName))
+    m_puzzleLogic(new PuzzleLogic(this, difficulty + 2, saveName)),
+    m_mainWindow(mainWindow)
 {
     ui->setupUi(this);
     setupUiSizes();
     createButtons();
 
+    ui->undoButton->setEnabled(false);
+    ui->redoButton->setEnabled(false);
+
     connect(this, &GameWindow::tileClickSignal, m_puzzleLogic, &PuzzleLogic::onGameTilePress);
+    connect(ui->saveCloseButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onSaveButtonPress);
+    connect(ui->undoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onUndoButtonPress);
+    connect(ui->redoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onRedoButtonPress);
 }
 
 GameWindow::~GameWindow()
@@ -23,7 +29,7 @@ GameWindow::~GameWindow()
     delete m_puzzleLogic;
 }
 
-void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos, int moves, bool finished) const
+void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos) const
 {
     QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui->puzzleGroupBox->layout());
 
@@ -36,19 +42,11 @@ void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::p
     gridLayout->addWidget(pressed, emptyPos.first, emptyPos.second);
     gridLayout->addWidget(empty, tilePos.first, tilePos.second);
 
-    updateMoves(moves);
-
-    if(finished)
-    {
-        qInfo() << "FINISHED";
-        return;
-    }
-
     int emptyIndex = emptyPos.first * m_puzzleLogic->gridSize() + emptyPos.second;
     connect(pressed, &QPushButton::clicked,
             [this, emptyIndex]()
             {
-                onTileButtonClick(emptyIndex);
+                emit tileClickSignal(emptyIndex);
             }
     );
 
@@ -56,19 +54,9 @@ void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::p
     connect(empty, &QPushButton::clicked,
             [this, pressedIndex]()
             {
-                onTileButtonClick(pressedIndex);
+                emit tileClickSignal(pressedIndex);
             }
     );
-}
-
-void GameWindow::updateMoves(unsigned moves) const
-{
-    ui->movesCount->setText(QString::number(moves));
-}
-
-void GameWindow::onGameFinish()
-{
-
 }
 
 void GameWindow::setupUiSizes()
@@ -89,30 +77,51 @@ void GameWindow::createButtons() const
 
     for(unsigned index = 0; index < gridSize * gridSize; index++)
     {
-        QPushButton* button = new QPushButton(ui->puzzleGroupBox);
-        button->setFixedSize(TILE_SIZE, TILE_SIZE);
-
         int tile = m_puzzleLogic->currentState().getTile(index);
         QString text = QString::number(tile);
+        QPushButton* button = new QPushButton(ui->puzzleGroupBox);
+
+        button->setFixedSize(TILE_SIZE, TILE_SIZE);
         button->setText((tile == 0) ? "" : text);
         button->setFlat(button->text() == "");
-
-        QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui->puzzleGroupBox->layout());
+        button->setEnabled(!button->isFlat());
 
         int x = index / gridSize;
         int y = index % gridSize;
+        QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui->puzzleGroupBox->layout());
+
         gridLayout->addWidget(button, x, y);
 
         connect(button, &QPushButton::clicked,
                 [this, index]()
                 {
-                    onTileButtonClick(index);
+                    emit tileClickSignal(index);
                 }
         );
     }
 }
 
-void GameWindow::onTileButtonClick(unsigned buttonIndex) const
+void GameWindow::onGameFinish()
 {
-    emit tileClickSignal(buttonIndex);
+    // BIG FINALE
+}
+
+void GameWindow::changeMovesCounter(unsigned moved) const
+{
+    ui->movesCount->setText(QString::number(moved));
+}
+
+void GameWindow::setUndoButtonEnabled(bool enabled) const
+{
+    ui->undoButton->setEnabled(enabled);
+}
+
+void GameWindow::setRedoButtonEnabled(bool enabled) const
+{
+    ui->redoButton->setEnabled(enabled);
+}
+
+void GameWindow::updateTimer(QString newTime) const
+{
+    ui->timeCount->setText(newTime);
 }

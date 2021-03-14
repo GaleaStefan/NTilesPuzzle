@@ -43,6 +43,6 @@ void MainWindow::createNewGame(const QString &saveName, int difficulty)
 
     this->hide();
 
-    m_gameWindow = new GameWindow(saveName, difficulty);
+    m_gameWindow = new GameWindow(saveName, difficulty, this);
     m_gameWindow->show();
 }

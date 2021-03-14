@@ -6,17 +6,19 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonValue>
+#include <QJsonArray>
 
 class JsonFile
 {
 public:
     JsonFile();
     JsonFile(const QString& path, const QString& name);
-    ~JsonFile();
+    virtual ~JsonFile();
 
     static bool fileExists(const QString& path, const QString& name);
     static void createFile(const QString& path, const QString& name);
     void        openFile(const QString& path, const QString& name);
+    void        saveFile();
 
     QJsonValue  getValue(const QString& key) const;
 

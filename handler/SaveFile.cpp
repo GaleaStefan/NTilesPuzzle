@@ -37,3 +37,39 @@ bool SaveFile::isNameValid(const QString &name)
 
     return true;
 }
+
+void SaveFile::saveGame(unsigned grid, unsigned moves, unsigned hints, unsigned time, unsigned currentState, std::vector<PuzzleState> states)
+{
+    QJsonValue gridValue = QJsonValue((int)grid);
+    QJsonValue movesValue = QJsonValue((int)moves);
+    QJsonValue hintsValue = QJsonValue((int)hints);
+    QJsonValue timeValue = QJsonValue((int)time);
+    QJsonValue currentValue = QJsonValue((int)currentState);
+
+
+    QJsonArray statesArray;
+
+    for(unsigned state = 0; state < states.size(); state++)
+    {
+        std::vector<unsigned> configuration = states[state].getState();
+        QJsonArray configArray;
+
+        for(unsigned index = 0; index < configuration.size(); index++)
+        {
+            configArray.push_back(QJsonValue((int)configuration[index]));
+        }
+
+        statesArray.push_back(configArray);
+    }
+
+    m_rootObject["grid"] = gridValue;
+    m_rootObject["moves"] = movesValue;
+    m_rootObject["hints"] = hintsValue;
+    m_rootObject["time"] = timeValue;
+    m_rootObject["last_state"] = currentValue;
+    m_rootObject["states"] = statesArray;
+
+    m_jsonDoc = QJsonDocument(m_rootObject);
+
+    saveFile();
+}

@@ -129,7 +129,7 @@ bool PuzzleState::isGoalState() const
         }
     }
 
-    return m_tiles[m_matrixSize * m_matrixSize] == 0;
+    return m_tiles[m_matrixSize * m_matrixSize - 1] == 0;
 }
 
 std::vector<unsigned> PuzzleState::getState() const

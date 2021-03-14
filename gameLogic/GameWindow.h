@@ -18,27 +18,31 @@ class GameWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit GameWindow(const QString& saveName, int difficulty, QWidget *parent = nullptr);
+    explicit GameWindow(const QString& saveName, int difficulty, QWidget* mainWindow);
     ~GameWindow();
 
 signals:
+    //void undoClickSignal() const;
+    //void redoClickSignal() const;
     void tileClickSignal(int index) const;
+    void gameFinishSignal() const;
 
 public slots:
-    void updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos, int moves, bool finished) const;
-    void updateMoves(unsigned moves) const;
+    void updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos) const;
     void onGameFinish();
+    void changeMovesCounter(unsigned moved) const;
+    void setUndoButtonEnabled(bool) const;
+    void setRedoButtonEnabled(bool) const;
+    void updateTimer(QString newTime) const;
 
 private:
     void setupUiSizes();
     void createButtons() const;
 
-private slots:
-    void onTileButtonClick(unsigned index) const;
-
 private:
     Ui::GameWindow* ui;
     PuzzleLogic*    m_puzzleLogic;
+    QWidget*        m_mainWindow;
 };
 
 #endif // GAMEWINDOW_H

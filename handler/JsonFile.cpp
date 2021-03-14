@@ -4,7 +4,6 @@
 JsonFile::JsonFile() :
     m_file(nullptr)
 {
-
 }
 
 JsonFile::JsonFile(const QString& path, const QString& name) :
@@ -20,9 +19,10 @@ JsonFile::JsonFile(const QString& path, const QString& name) :
 
 JsonFile::~JsonFile()
 {
-    m_file->write(m_jsonDoc.toJson());
-    m_file->close();
-    delete  m_file;
+    if(m_file != nullptr)
+    {
+        delete  m_file;
+    }
 }
 
 bool JsonFile::fileExists(const QString& path, const QString& name)
@@ -52,6 +52,11 @@ void JsonFile::openFile(const QString& path, const QString& name)
 
     m_jsonDoc = QJsonDocument::fromJson(m_file->readAll());
     m_rootObject = m_jsonDoc.object();
+}
+
+void JsonFile::saveFile()
+{
+    m_file->write(m_jsonDoc.toJson());
 }
 
 QJsonValue JsonFile::getValue(const QString &key) const

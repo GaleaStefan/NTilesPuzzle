@@ -16,7 +16,7 @@ public:
     std::vector<unsigned>           getState() const;
     unsigned                        getTile(unsigned index) const;
     unsigned                        getIndex(unsigned tile) const;
-    std::pair<unsigned, unsigned>   getGridFromArray(unsigned arrayIndex) const;
+    std::pair<unsigned, unsigned>   getGridFromArray(unsigned arrayIndex) const; // Can be made static
     std::pair<unsigned, unsigned>   getGridFromTile(unsigned tile) const;
 
     void                            setState(const std::vector<unsigned>& configuration);
