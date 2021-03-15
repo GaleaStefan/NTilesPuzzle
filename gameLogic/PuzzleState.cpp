@@ -1,8 +1,8 @@
 #include "PuzzleState.h"
 
 #include <QDebug>
+#include <QRandomGenerator>
 
-#include <random>
 #include <map>
 #include <assert.h>
 
@@ -27,9 +27,7 @@ PuzzleState PuzzleState::generateRandomState(unsigned matSize)
 {
     PuzzleState randomState;
 
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_int_distribution<unsigned> distance(0, matSize * matSize - 1);
+    QRandomGenerator* generator = new QRandomGenerator(QRandomGenerator::securelySeeded());
 
     do
     {
@@ -42,7 +40,7 @@ PuzzleState PuzzleState::generateRandomState(unsigned matSize)
 
             do
             {
-                tile = distance(mt);
+                tile = (unsigned)generator->bounded(0, (int)(matSize * matSize));
             } while(usedTiles[tile]);
 
             usedTiles[tile] = true;
