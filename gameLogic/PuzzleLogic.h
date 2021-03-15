@@ -19,6 +19,8 @@ public:
     PuzzleLogic(QWidget* gameWindow, const QString& saveName);
     virtual ~PuzzleLogic();
 
+    void        saveGame() const;
+
     unsigned    gridSize() const;
     void        setGridSize(const unsigned &gridSize);
 

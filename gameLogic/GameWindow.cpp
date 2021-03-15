@@ -1,5 +1,6 @@
 #include "GameWindow.h"
 #include "ui_GameWindow.h"
+#include "main/MainWindow.h"
 
 #define TILE_SIZE 64
 #define TILE_SPACE 8
@@ -13,14 +14,10 @@ GameWindow::GameWindow(const QString& saveName, int difficulty, QWidget* mainWin
     ui->setupUi(this);
     setupUiSizes();
     createButtons();
+    setupConnections();
 
     ui->undoButton->setEnabled(false);
     ui->redoButton->setEnabled(false);
-
-    connect(this, &GameWindow::tileClickSignal, m_puzzleLogic, &PuzzleLogic::onGameTilePress);
-    connect(ui->saveCloseButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onSaveButtonPress);
-    connect(ui->undoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onUndoButtonPress);
-    connect(ui->redoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onRedoButtonPress);
 }
 
 GameWindow::GameWindow(const QString &saveName, QWidget *mainWindow) :
@@ -33,11 +30,7 @@ GameWindow::GameWindow(const QString &saveName, QWidget *mainWindow) :
 
     setupUiSizes();
     createButtons();
-
-    connect(this, &GameWindow::tileClickSignal, m_puzzleLogic, &PuzzleLogic::onGameTilePress);
-    connect(ui->saveCloseButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onSaveButtonPress);
-    connect(ui->undoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onUndoButtonPress);
-    connect(ui->redoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onRedoButtonPress);
+    setupConnections();
 }
 
 GameWindow::~GameWindow()
@@ -86,6 +79,17 @@ void GameWindow::setupUiSizes()
     ui->puzzleGroupBox->setFixedSize(groupBoxWidth, groupBoxWidth);
     ui->infoGroupBox->setFixedWidth(groupBoxWidth);
     ui->saveCloseButton->setFixedWidth(groupBoxWidth);
+}
+
+void GameWindow::setupConnections() const
+{
+    MainWindow* castMain = qobject_cast<MainWindow*>(m_mainWindow);
+
+    connect(this, &GameWindow::tileClickSignal, m_puzzleLogic, &PuzzleLogic::onGameTilePress);
+    connect(ui->saveCloseButton, &QPushButton::pressed, this, &GameWindow::close);
+    connect(ui->undoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onUndoButtonPress);
+    connect(ui->redoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onRedoButtonPress);
+    connect(this, &GameWindow::windowCloseSignal, castMain, &MainWindow::onGameWindowClose);
 }
 
 void GameWindow::createButtons() const
@@ -141,4 +145,11 @@ void GameWindow::setRedoButtonEnabled(bool enabled) const
 void GameWindow::updateTimer(QString newTime) const
 {
     ui->timeCount->setText(newTime);
+}
+
+void GameWindow::closeEvent(QCloseEvent *event)
+{
+    m_puzzleLogic->saveGame();
+
+    emit windowCloseSignal();
 }

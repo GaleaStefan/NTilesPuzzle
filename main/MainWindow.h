@@ -22,6 +22,7 @@ public:
 public slots:
     void createNewGame(const QString& saveName, int difficulty);
     void onSaveSelect(const QString& saveName);
+    void onGameWindowClose();
 
 private slots:
     void onNewBtnPress();

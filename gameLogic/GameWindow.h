@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMap>
 #include <QPushButton>
+#include <QCloseEvent>
 
 #include <utility>
 
@@ -23,10 +24,9 @@ public:
     ~GameWindow();
 
 signals:
-    //void undoClickSignal() const;
-    //void redoClickSignal() const;
     void tileClickSignal(int index) const;
     void gameFinishSignal() const;
+    void windowCloseSignal() const;
 
 public slots:
     void updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos) const;
@@ -36,8 +36,12 @@ public slots:
     void setRedoButtonEnabled(bool) const;
     void updateTimer(QString newTime) const;
 
+protected:
+    void closeEvent(QCloseEvent* event);
+
 private:
     void setupUiSizes();
+    void setupConnections() const;
     void createButtons() const;
 
 private:

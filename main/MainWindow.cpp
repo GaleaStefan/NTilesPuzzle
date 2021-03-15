@@ -19,8 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete m_levelSelector;
-    delete m_gameWindow;
 }
 
 void MainWindow::onNewBtnPress()
@@ -65,4 +63,11 @@ void MainWindow::onSaveSelect(const QString &saveName)
 
     m_gameWindow = new GameWindow(saveName, this);
     m_gameWindow->show();
+}
+
+void MainWindow::onGameWindowClose()
+{
+    delete m_gameWindow;
+    m_gameWindow = nullptr;
+    this->show();
 }

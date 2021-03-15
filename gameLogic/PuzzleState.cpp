@@ -50,6 +50,7 @@ PuzzleState PuzzleState::generateRandomState(unsigned matSize)
         randomState = PuzzleState(matSize, configuration);
     }while(!randomState.isSolvable());
 
+    delete generator;
     return randomState;
 }
 

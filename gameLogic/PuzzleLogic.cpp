@@ -33,6 +33,11 @@ PuzzleLogic::~PuzzleLogic()
     killTimer(m_timerId);
 }
 
+void PuzzleLogic::saveGame() const
+{
+    m_saveFile->saveGame(m_gameData);
+}
+
 unsigned PuzzleLogic::gridSize() const
 {
     return m_gameData->m_grid;
@@ -74,6 +79,7 @@ void PuzzleLogic::onGameTilePress(unsigned tileIndex)
 void PuzzleLogic::onSaveButtonPress()
 {
     m_saveFile->saveGame(m_gameData);
+    //m_currentGame->close();
 }
 
 void PuzzleLogic::onUndoButtonPress()
