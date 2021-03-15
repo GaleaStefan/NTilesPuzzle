@@ -3,6 +3,7 @@
 
 #include "PuzzleState.h"
 #include "handler/SaveFile.h"
+#include "handler/SaveData.h"
 
 #include <QWidget>
 #include <QTimerEvent>
@@ -15,6 +16,7 @@ class PuzzleLogic : public QObject
 
 public:
     PuzzleLogic(QWidget* gameWindow, unsigned grid, const QString& saveName);
+    PuzzleLogic(QWidget* gameWindow, const QString& saveName);
     virtual ~PuzzleLogic();
 
     unsigned    gridSize() const;
@@ -44,15 +46,10 @@ private:
     void        handleTilesMove(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos);
 
 private:
-    unsigned                    m_gridSize;
-    unsigned                    m_moves;
-    unsigned                    m_hints;
-    unsigned                    m_time;
+    SaveData*                   m_gameData;
     unsigned                    m_timerId;
-    unsigned                    m_currentState;
     QWidget*                    m_currentGame;
     SaveFile*                   m_saveFile;
-    std::vector<PuzzleState>    m_statesHistory;
 };
 
 #endif // PUZZLELOGIC_H

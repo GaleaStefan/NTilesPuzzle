@@ -15,6 +15,7 @@ SOURCES += \
     handler/JsonFile.cpp \
     handler/SaveFile.cpp \
     levels/LevelDialog.cpp \
+    loader/GameLoader.cpp \
     main.cpp \
     main/MainWindow.cpp
 
@@ -23,13 +24,16 @@ HEADERS += \
     gameLogic/PuzzleLogic.h \
     gameLogic/PuzzleState.h \
     handler/JsonFile.h \
+    handler/SaveData.h \
     handler/SaveFile.h \
     levels/LevelDialog.h \
+    loader/GameLoader.h \
     main/MainWindow.h
 
 FORMS += \
     gameLogic/GameWindow.ui \
     levels/LevelDialog.ui \
+    loader/GameLoader.ui \
     main/MainWindow.ui
 
 # Default rules for deployment.

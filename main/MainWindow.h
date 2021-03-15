@@ -5,6 +5,7 @@
 
 #include "levels/LevelDialog.h"
 #include "gameLogic/GameWindow.h"
+#include "loader/GameLoader.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,10 +21,11 @@ public:
 
 public slots:
     void createNewGame(const QString& saveName, int difficulty);
+    void onSaveSelect(const QString& saveName);
 
 private slots:
     void onNewBtnPress();
-    //void onLoadBtnPress();
+    void onLoadBtnPress();
     //void onAboutBtnPress();
     //void onHowBtnPress();
 
@@ -31,6 +33,6 @@ private:
     Ui::MainWindow *ui;
     LevelDialog *m_levelSelector;
     GameWindow *m_gameWindow;
-
+    GameLoader *m_gameLoader;
 };
 #endif // MAINWINDOW_H

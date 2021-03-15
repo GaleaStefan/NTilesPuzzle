@@ -56,7 +56,9 @@ void JsonFile::openFile(const QString& path, const QString& name)
 
 void JsonFile::saveFile()
 {
+    m_file->seek(0);
     m_file->write(m_jsonDoc.toJson());
+    m_file->close();
 }
 
 QJsonValue JsonFile::getValue(const QString &key) const

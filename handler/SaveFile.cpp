@@ -5,11 +5,6 @@
 #define SAVE_EXTENSION ".json"
 #define SAVE_MIN_LEN 3
 
-SaveFile::SaveFile()
-{
-
-}
-
 SaveFile::SaveFile(const QString &saveName) :
     JsonFile(SAVE_PATH, saveName + SAVE_EXTENSION)
 {
@@ -38,20 +33,20 @@ bool SaveFile::isNameValid(const QString &name)
     return true;
 }
 
-void SaveFile::saveGame(unsigned grid, unsigned moves, unsigned hints, unsigned time, unsigned currentState, std::vector<PuzzleState> states)
+void SaveFile::saveGame(SaveData* saveData)
 {
-    QJsonValue gridValue = QJsonValue((int)grid);
-    QJsonValue movesValue = QJsonValue((int)moves);
-    QJsonValue hintsValue = QJsonValue((int)hints);
-    QJsonValue timeValue = QJsonValue((int)time);
-    QJsonValue currentValue = QJsonValue((int)currentState);
+    QJsonValue gridValue = QJsonValue((int)saveData->m_grid);
+    QJsonValue movesValue = QJsonValue((int)saveData->m_moves);
+    QJsonValue hintsValue = QJsonValue((int)saveData->m_hints);
+    QJsonValue timeValue = QJsonValue((int)saveData->m_time);
+    QJsonValue currentValue = QJsonValue((int)saveData->m_state);
 
 
     QJsonArray statesArray;
 
-    for(unsigned state = 0; state < states.size(); state++)
+    for(unsigned state = 0; state < saveData->m_history.size(); state++)
     {
-        std::vector<unsigned> configuration = states[state].getState();
+        std::vector<unsigned> configuration = saveData->m_history[state].getState();
         QJsonArray configArray;
 
         for(unsigned index = 0; index < configuration.size(); index++)
@@ -72,4 +67,35 @@ void SaveFile::saveGame(unsigned grid, unsigned moves, unsigned hints, unsigned 
     m_jsonDoc = QJsonDocument(m_rootObject);
 
     saveFile();
+}
+
+SaveData* SaveFile::loadGame()
+{
+    SaveData* saveData = new SaveData;
+
+    saveData->m_grid = (unsigned)m_rootObject["grid"].toInt();
+    saveData->m_moves = (unsigned)m_rootObject["moves"].toInt();
+    saveData->m_hints = (unsigned)m_rootObject["hints"].toInt();
+    saveData->m_time = (unsigned)m_rootObject["time"].toInt();
+    saveData->m_state = (unsigned)m_rootObject["last_state"].toInt();
+
+    QJsonArray statesArray = m_rootObject["states"].toArray();
+    std::vector<PuzzleState> states;
+
+    for(unsigned index = 0; index < statesArray.size(); index++)
+    {
+        QJsonArray state = statesArray[index].toArray();
+        std::vector<unsigned> stateVector;
+
+        for(unsigned tileIndex = 0; tileIndex < state.size(); tileIndex++)
+        {
+            stateVector.push_back((unsigned)state[tileIndex].toInt());
+        }
+
+        states.push_back(PuzzleState(saveData->m_grid, stateVector));
+    }
+
+    saveData->m_history = states;
+
+    return saveData;
 }

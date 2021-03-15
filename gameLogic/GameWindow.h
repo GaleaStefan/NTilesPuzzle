@@ -18,7 +18,8 @@ class GameWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit GameWindow(const QString& saveName, int difficulty, QWidget* mainWindow);
+    explicit GameWindow(const QString& saveName, int difficulty, QWidget* mainWindow); // for new games
+    explicit GameWindow(const QString& saveName, QWidget* mainWindow); // for game load
     ~GameWindow();
 
 signals:

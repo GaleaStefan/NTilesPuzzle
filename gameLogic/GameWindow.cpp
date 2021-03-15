@@ -23,6 +23,23 @@ GameWindow::GameWindow(const QString& saveName, int difficulty, QWidget* mainWin
     connect(ui->redoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onRedoButtonPress);
 }
 
+GameWindow::GameWindow(const QString &saveName, QWidget *mainWindow) :
+    ui(new Ui::GameWindow),
+    m_mainWindow(mainWindow)
+{
+    ui->setupUi(this);
+    m_puzzleLogic = new PuzzleLogic(this, saveName);
+    m_puzzleLogic->gridSize();
+
+    setupUiSizes();
+    createButtons();
+
+    connect(this, &GameWindow::tileClickSignal, m_puzzleLogic, &PuzzleLogic::onGameTilePress);
+    connect(ui->saveCloseButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onSaveButtonPress);
+    connect(ui->undoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onUndoButtonPress);
+    connect(ui->redoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onRedoButtonPress);
+}
+
 GameWindow::~GameWindow()
 {
     delete ui;
