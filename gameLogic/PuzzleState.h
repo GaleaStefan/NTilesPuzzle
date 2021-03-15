@@ -26,10 +26,13 @@ public:
     bool                            isGoalState() const;
     bool                            isSolvable() const;
 
-private:
+    unsigned                        getMatrixSize() const;
+    void                            setMatrixSize(unsigned matrixSize);
+
+protected:
     unsigned                        calculateInversions() const;
 
-private:
+protected:
     unsigned                m_matrixSize;
     std::vector<unsigned>   m_tiles;
 };

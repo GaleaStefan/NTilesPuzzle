@@ -94,6 +94,16 @@ unsigned PuzzleState::calculateInversions() const
     return inversions;
 }
 
+unsigned PuzzleState::getMatrixSize() const
+{
+    return m_matrixSize;
+}
+
+void PuzzleState::setMatrixSize(unsigned matrixSize)
+{
+    m_matrixSize = matrixSize;
+}
+
 std::pair<unsigned, unsigned> PuzzleState::getGridFromArray(unsigned arrayIndex) const
 {
     return {arrayIndex / m_matrixSize, arrayIndex % m_matrixSize};
