@@ -4,6 +4,7 @@
 #include "PuzzleState.h"
 #include "handler/SaveFile.h"
 #include "handler/SaveData.h"
+#include "gameSolver/Hint.h"
 
 #include <QWidget>
 #include <QTimerEvent>
@@ -33,12 +34,14 @@ signals:
     void        canUndoMove(bool) const;
     void        canRedoMove(bool) const;
     void        timerChange(QString time);
+    void        hintRequest();
 
 public slots:
     void        onGameTilePress(unsigned tileIndex);
     void        onSaveButtonPress();
     void        onUndoButtonPress();
     void        onRedoButtonPress();
+    void        onHintButtonPress();
 
 protected:
     void        timerEvent(QTimerEvent* event);
@@ -52,6 +55,7 @@ private:
     unsigned                    m_timerId;
     QWidget*                    m_currentGame;
     SaveFile*                   m_saveFile;
+    Hint*                       m_hintManager;
 };
 
 #endif // PUZZLELOGIC_H

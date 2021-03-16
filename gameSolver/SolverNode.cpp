@@ -18,19 +18,30 @@ SolverNode::SolverNode(const SolverState &state, SolverNode *parent, eAction act
     m_cost = m_state.getManhattanDistance() + m_treeLevel;
 }
 
-/*SolverNode::SolverNode(const SolverNode &other)
+/*
+SolverNode::SolverNode(const SolverNode &other)
 {
+    m_treeLevel = other.m_treeLevel;
+    m_cost = other.m_cost;
+    m_state = other.m_state;
+    m_nodeAction = other.m_nodeAction;
 
-}*/
+    if(other.m_parent != nullptr)
+    {
+        m_parent = new SolverNode(other.m_state, other.m_parent, other.m_nodeAction);
+    }
+}
+*/
 
 SolverNode::~SolverNode()
 {
-    /*if(m_parent != nullptr)
+    if(m_parent != nullptr)
     {
         delete  m_parent;
         m_parent = nullptr;
-    }*/
+    }
 }
+
 
 bool SolverNode::operator<(const SolverNode &other) const
 {

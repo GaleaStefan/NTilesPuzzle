@@ -1,13 +1,11 @@
 #include "PuzzleSolver.h"
 #include "eAction.h"
 
-#include <QDebug>
-
 PuzzleSolver::PuzzleSolver(const PuzzleState& state)
 {
     m_initialState = SolverState(state.getMatrixSize(), state.getState());
 
-    connect(this, &PuzzleSolver::puzzleSolved, this, &PuzzleSolver::testSolve);
+    //connect(this, &PuzzleSolver::puzzleSolved, this, &PuzzleSolver::testSolve);
 }
 
 void PuzzleSolver::solvePuzzle()
@@ -30,15 +28,16 @@ void PuzzleSolver::solvePuzzle()
         if(currentNode.state().isGoalState())
         {
             m_goalNode = currentNode;
-            emit puzzleSolved();
             return;
         }
 
         generateChildren(currentNode);
+
+        delete currentNode.parentNode();
     }
 }
 
-void PuzzleSolver::testSolve()
+unsigned PuzzleSolver::getFirstMovedTile()
 {
     SolverNode* node = &m_goalNode;
 
@@ -48,19 +47,9 @@ void PuzzleSolver::testSolve()
         node = node->parentNode();
     }
 
-    while (!m_solutionNodes.empty())
-    {
-        std::vector<unsigned> state = m_solutionNodes.top()->state().getState();
+    m_solutionNodes.pop();
 
-        for(unsigned tile : state)
-        {
-            qInfo() << tile << " ";
-        }
-
-        qInfo() << '\n';
-
-        m_solutionNodes.pop();
-    }
+    return m_solutionNodes.top()->state().getIndex(0);
 }
 
 void PuzzleSolver::generateChildren(SolverNode node)

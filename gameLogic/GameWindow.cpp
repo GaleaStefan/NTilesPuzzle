@@ -89,6 +89,7 @@ void GameWindow::setupConnections() const
     connect(ui->saveCloseButton, &QPushButton::pressed, this, &GameWindow::close);
     connect(ui->undoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onUndoButtonPress);
     connect(ui->redoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onRedoButtonPress);
+    connect(ui->hintbutton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onHintButtonPress);
     connect(this, &GameWindow::windowCloseSignal, castMain, &MainWindow::onGameWindowClose);
 }
 

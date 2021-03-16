@@ -19,16 +19,11 @@ class PuzzleSolver : public QObject
 public:
     PuzzleSolver(const PuzzleState& initialState);
 
-    void solvePuzzle();
-
-signals:
-    void puzzleSolved();
-
-private slots:  // ONLY FOR TEST
-    void testSolve();
+    void        solvePuzzle();
+    unsigned    getFirstMovedTile();
 
 private:
-    void generateChildren(SolverNode node);
+    void        generateChildren(SolverNode node);
 
 private:
     SolverState                                                             m_initialState;
