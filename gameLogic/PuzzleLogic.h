@@ -4,7 +4,7 @@
 #include "PuzzleState.h"
 #include "handler/SaveFile.h"
 #include "handler/SaveData.h"
-#include "gameSolver/Hint.h"
+#include "gameSolver/HintDialog.h"
 
 #include <QWidget>
 #include <QTimerEvent>
@@ -55,7 +55,7 @@ private:
     unsigned                    m_timerId;
     QWidget*                    m_currentGame;
     SaveFile*                   m_saveFile;
-    Hint*                       m_hintManager;
+    //HintDialog*                 m_hintManager;
 };
 
 #endif // PUZZLELOGIC_H

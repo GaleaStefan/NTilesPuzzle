@@ -1,4 +1,5 @@
 #include <QDialog>
+#include <QLabel>
 
 #include "PuzzleLogic.h"
 #include "GameWindow.h"
@@ -6,8 +7,7 @@
 PuzzleLogic::PuzzleLogic(QWidget* parentWindow, unsigned grid, const QString& saveName) :
     m_timerId(startTimer(1000)),
     m_currentGame(parentWindow),
-    m_saveFile(new SaveFile(saveName)),
-    m_hintManager(new Hint(this))
+    m_saveFile(new SaveFile(saveName))
 {
 
     m_gameData = new SaveData {0, 0, 0, grid, 0, std::vector<PuzzleState>()};
@@ -17,8 +17,7 @@ PuzzleLogic::PuzzleLogic(QWidget* parentWindow, unsigned grid, const QString& sa
 
 PuzzleLogic::PuzzleLogic(QWidget *gameWindow, const QString &saveName) :
     m_currentGame(gameWindow),
-    m_saveFile(new SaveFile(saveName)),
-    m_hintManager(new Hint(this))
+    m_saveFile(new SaveFile(saveName))
 {
     m_gameData = m_saveFile->loadGame();
     m_timerId = startTimer(1000);
@@ -118,17 +117,16 @@ void PuzzleLogic::onRedoButtonPress()
 
 void PuzzleLogic::onHintButtonPress()
 {
-    QString hint = m_hintManager->getHint(m_gameData->m_history[m_gameData->m_state]);
     m_gameData->m_hints++;
     emit hintRequest();
 
     GameWindow* currentGame = qobject_cast<GameWindow*>(m_currentGame);
 
-    QDialog* dialog = new QDialog(currentGame);
-    dialog->setWindowTitle("HINT");
-    dialog->show();
-    dialog->exec();
-    dialog->close();
+    HintDialog* hintDialog = new HintDialog(m_gameData->m_history[m_gameData->m_state], currentGame);
+    hintDialog->getHint();
+    hintDialog->exec();
+    delete hintDialog;
+
 }
 
 void PuzzleLogic::timerEvent(QTimerEvent *event)

@@ -10,7 +10,7 @@ public:
     SolverNode();
     SolverNode(const SolverState& state, SolverNode* parent, eAction action);
     //SolverNode(const SolverNode& other);
-    ~SolverNode();
+    //~SolverNode();
 
     bool        operator<(const SolverNode& other) const;
 

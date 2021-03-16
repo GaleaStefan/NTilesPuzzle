@@ -12,7 +12,7 @@ SOURCES += \
     gameLogic/GameWindow.cpp \
     gameLogic/PuzzleLogic.cpp \
     gameLogic/PuzzleState.cpp \
-    gameSolver/Hint.cpp \
+    gameSolver/HintDialog.cpp \
     gameSolver/PuzzleSolver.cpp \
     gameSolver/SolverNode.cpp \
     gameSolver/SolverState.cpp \
@@ -27,7 +27,7 @@ HEADERS += \
     gameLogic/GameWindow.h \
     gameLogic/PuzzleLogic.h \
     gameLogic/PuzzleState.h \
-    gameSolver/Hint.h \
+    gameSolver/HintDialog.h \
     gameSolver/PuzzleSolver.h \
     gameSolver/SolverNode.h \
     gameSolver/SolverState.h \
@@ -41,6 +41,7 @@ HEADERS += \
 
 FORMS += \
     gameLogic/GameWindow.ui \
+    gameSolver/HintDialog.ui \
     levels/LevelDialog.ui \
     loader/GameLoader.ui \
     main/MainWindow.ui

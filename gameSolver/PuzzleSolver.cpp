@@ -33,7 +33,7 @@ void PuzzleSolver::solvePuzzle()
 
         generateChildren(currentNode);
 
-        delete currentNode.parentNode();
+        //delete currentNode.parentNode();
     }
 }
 

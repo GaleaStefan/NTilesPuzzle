@@ -31,7 +31,7 @@ SolverNode::SolverNode(const SolverNode &other)
         m_parent = new SolverNode(other.m_state, other.m_parent, other.m_nodeAction);
     }
 }
-*/
+
 
 SolverNode::~SolverNode()
 {
@@ -41,7 +41,7 @@ SolverNode::~SolverNode()
         m_parent = nullptr;
     }
 }
-
+*/
 
 bool SolverNode::operator<(const SolverNode &other) const
 {
