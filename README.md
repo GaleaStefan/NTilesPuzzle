@@ -17,3 +17,7 @@ Game created using C++ and Qt
 
 ### v1.0.0 
 First public release
+
+### v1.1.0
+- added hints system
+- code cleanup
