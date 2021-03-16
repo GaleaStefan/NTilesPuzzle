@@ -7,7 +7,7 @@ From the main menu, press "New Game", choose a difficulty and a save name then p
 ## Features
 * Undo/Redo moves
 * Load/Create games
-* Hints - based on A* (not yet implemented)
+* Hints - based on A*
 * Final score + leaderboard (not yet implemented)
 
 ## Implementation
