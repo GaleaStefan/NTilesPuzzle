@@ -16,15 +16,14 @@ class HintDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit HintDialog(const PuzzleState& state, QWidget *parent = nullptr);
+    explicit HintDialog(QWidget *parent = nullptr);
     ~HintDialog();
 
-    void getHint() const;
+    void getHint(const PuzzleState& state) const;
 
 private:
     Ui::HintDialog*         ui;
     std::vector<QString>    m_hintMessages;
-    PuzzleState             m_state;
 };
 
 #endif // HINTDIALOG_H

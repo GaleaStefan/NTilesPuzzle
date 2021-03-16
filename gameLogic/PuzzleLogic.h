@@ -34,7 +34,7 @@ signals:
     void        canUndoMove(bool) const;
     void        canRedoMove(bool) const;
     void        timerChange(QString time);
-    void        hintRequest();
+    void        hintCountChange(unsigned newCount);
 
 public slots:
     void        onGameTilePress(unsigned tileIndex);
@@ -55,7 +55,6 @@ private:
     unsigned                    m_timerId;
     QWidget*                    m_currentGame;
     SaveFile*                   m_saveFile;
-    //HintDialog*                 m_hintManager;
 };
 
 #endif // PUZZLELOGIC_H

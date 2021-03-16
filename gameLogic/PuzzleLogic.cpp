@@ -118,15 +118,7 @@ void PuzzleLogic::onRedoButtonPress()
 void PuzzleLogic::onHintButtonPress()
 {
     m_gameData->m_hints++;
-    emit hintRequest();
-
-    GameWindow* currentGame = qobject_cast<GameWindow*>(m_currentGame);
-
-    HintDialog* hintDialog = new HintDialog(m_gameData->m_history[m_gameData->m_state], currentGame);
-    hintDialog->getHint();
-    hintDialog->exec();
-    delete hintDialog;
-
+    emit hintCountChange(m_gameData->m_hints);
 }
 
 void PuzzleLogic::timerEvent(QTimerEvent *event)
@@ -169,4 +161,5 @@ void PuzzleLogic::setupConnections() const
     connect(this, &PuzzleLogic::canUndoMove, currentGame, &GameWindow::setUndoButtonEnabled);
     connect(this, &PuzzleLogic::canRedoMove, currentGame, &GameWindow::setRedoButtonEnabled);
     connect(this, &PuzzleLogic::timerChange, currentGame, &GameWindow::updateTimer);
+    connect(this, &PuzzleLogic::hintCountChange, currentGame, &GameWindow::updateHintsCount);
 }

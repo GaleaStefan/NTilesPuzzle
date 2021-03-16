@@ -2,10 +2,9 @@
 #include "ui_HintDialog.h"
 #include "PuzzleSolver.h"
 
-HintDialog::HintDialog(const PuzzleState &state, QWidget *parent):
+HintDialog::HintDialog(QWidget *parent):
     QDialog(parent),
-    ui(new Ui::HintDialog),
-    m_state(state)
+    ui(new Ui::HintDialog)
 {
     m_hintMessages  = std::vector<QString> {
         "Move the ",
@@ -23,12 +22,12 @@ HintDialog::~HintDialog()
     delete ui;
 }
 
-void HintDialog::getHint() const
+void HintDialog::getHint(const PuzzleState& state) const
 {
-    PuzzleSolver solver(m_state);
+    PuzzleSolver solver(state);
     solver.solvePuzzle();
 
-    unsigned hintTile = m_state.getTile(solver.getFirstMovedTile());
+    unsigned hintTile = state.getTile(solver.getFirstMovedTile());
 
     ui->hintText->setText((hintTile > m_hintMessages.size() ? m_hintMessages[0] + QString::number((int)hintTile) : m_hintMessages[hintTile]));
 }

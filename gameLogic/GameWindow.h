@@ -9,6 +9,7 @@
 #include <utility>
 
 #include "PuzzleLogic.h"
+#include "gameSolver/HintDialog.h"
 
 namespace Ui {
 class GameWindow;
@@ -23,10 +24,13 @@ public:
     explicit GameWindow(const QString& saveName, QWidget* mainWindow); // for game load
     ~GameWindow();
 
+    void enableHintButton() const;
+
 signals:
     void tileClickSignal(int index) const;
     void gameFinishSignal() const;
     void windowCloseSignal() const;
+    void hintSignal() const;
 
 public slots:
     void updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos) const;
@@ -35,9 +39,13 @@ public slots:
     void setUndoButtonEnabled(bool) const;
     void setRedoButtonEnabled(bool) const;
     void updateTimer(QString newTime) const;
+    void updateHintsCount(unsigned count) const;
 
 protected:
     void closeEvent(QCloseEvent* event);
+
+private slots:
+    void hintPress() const;
 
 private:
     void setupUiSizes();
@@ -48,6 +56,8 @@ private:
     Ui::GameWindow* ui;
     PuzzleLogic*    m_puzzleLogic;
     QWidget*        m_mainWindow;
+    HintDialog*     m_hintDialog;
+
 };
 
 #endif // GAMEWINDOW_H

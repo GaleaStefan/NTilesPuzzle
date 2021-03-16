@@ -9,7 +9,8 @@
 GameWindow::GameWindow(const QString& saveName, int difficulty, QWidget* mainWindow) :
     ui(new Ui::GameWindow),
     m_puzzleLogic(new PuzzleLogic(this, difficulty + 2, saveName)),
-    m_mainWindow(mainWindow)
+    m_mainWindow(mainWindow),
+    m_hintDialog(new HintDialog(this))
 {
     ui->setupUi(this);
     setupUiSizes();
@@ -22,7 +23,8 @@ GameWindow::GameWindow(const QString& saveName, int difficulty, QWidget* mainWin
 
 GameWindow::GameWindow(const QString &saveName, QWidget *mainWindow) :
     ui(new Ui::GameWindow),
-    m_mainWindow(mainWindow)
+    m_mainWindow(mainWindow),
+    m_hintDialog(new HintDialog(this))
 {
     ui->setupUi(this);
     m_puzzleLogic = new PuzzleLogic(this, saveName);
@@ -37,6 +39,11 @@ GameWindow::~GameWindow()
 {
     delete ui;
     delete m_puzzleLogic;
+}
+
+void GameWindow::enableHintButton() const
+{
+    ui->hintbutton->setEnabled(true);
 }
 
 void GameWindow::updatePuzzleTiles(std::pair<unsigned, unsigned> tilePos, std::pair<unsigned, unsigned> emptyPos) const
@@ -89,8 +96,9 @@ void GameWindow::setupConnections() const
     connect(ui->saveCloseButton, &QPushButton::pressed, this, &GameWindow::close);
     connect(ui->undoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onUndoButtonPress);
     connect(ui->redoButton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onRedoButtonPress);
-    connect(ui->hintbutton, &QPushButton::pressed, m_puzzleLogic, &PuzzleLogic::onHintButtonPress);
+    connect(ui->hintbutton, &QPushButton::pressed, this, &GameWindow::hintPress);
     connect(this, &GameWindow::windowCloseSignal, castMain, &MainWindow::onGameWindowClose);
+    connect(this, &GameWindow::hintSignal, m_puzzleLogic, &PuzzleLogic::onHintButtonPress);
 }
 
 void GameWindow::createButtons() const
@@ -148,9 +156,27 @@ void GameWindow::updateTimer(QString newTime) const
     ui->timeCount->setText(newTime);
 }
 
+void GameWindow::updateHintsCount(unsigned count) const
+{
+    ui->hintsCount->setText(QString::number(count));
+}
+
 void GameWindow::closeEvent(QCloseEvent *event)
 {
     m_puzzleLogic->saveGame();
 
     emit windowCloseSignal();
+}
+
+void GameWindow::hintPress() const
+{
+    emit hintSignal();
+
+    ui->hintbutton->setEnabled(false);
+    m_hintDialog->getHint(m_puzzleLogic->currentState());
+    m_hintDialog->show();
+    m_hintDialog->exec();
+
+    ui->hintbutton->setEnabled(true);
+    m_hintDialog->hide();
 }

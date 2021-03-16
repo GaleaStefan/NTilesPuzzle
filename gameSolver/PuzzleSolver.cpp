@@ -4,8 +4,6 @@
 PuzzleSolver::PuzzleSolver(const PuzzleState& state)
 {
     m_initialState = SolverState(state.getMatrixSize(), state.getState());
-
-    //connect(this, &PuzzleSolver::puzzleSolved, this, &PuzzleSolver::testSolve);
 }
 
 void PuzzleSolver::solvePuzzle()
@@ -44,7 +42,7 @@ unsigned PuzzleSolver::getFirstMovedTile()
     while(node != nullptr)
     {
         m_solutionNodes.push(node);
-        node = node->parentNode();
+        node = node->parentNode().get();
     }
 
     m_solutionNodes.pop();
@@ -77,7 +75,7 @@ void PuzzleSolver::generateChildren(SolverNode node)
 
             if(m_exploredNodes.find(newState) == m_exploredNodes.end())
             {
-                SolverNode child(newState, new SolverNode(node), eAction(index));
+                SolverNode child(newState, std::shared_ptr<SolverNode>(new SolverNode(node)), eAction(index));
                 m_exploredNodes[newState] = true;
                 m_openNodes.push(child);
             }

@@ -9,7 +9,7 @@ SolverNode::SolverNode() :
 {
 }
 
-SolverNode::SolverNode(const SolverState &state, SolverNode *parent, eAction action) :
+SolverNode::SolverNode(const SolverState &state, std::shared_ptr<SolverNode> parent, eAction action) :
     m_state(state),
     m_parent(parent),
     m_nodeAction(action)
@@ -78,12 +78,12 @@ void SolverNode::setState(const SolverState &state)
     m_state = state;
 }
 
-SolverNode *SolverNode::parentNode() const
+std::shared_ptr<SolverNode> SolverNode::parentNode() const
 {
     return m_parent;
 }
 
-void SolverNode::setParentNode(SolverNode *parentNode)
+void SolverNode::setParentNode(std::shared_ptr<SolverNode> parentNode)
 {
     m_parent = parentNode;
 }
