@@ -1,3 +1,6 @@
+#include <QDialog>
+#include <QLabel>
+
 #include "PuzzleLogic.h"
 #include "GameWindow.h"
 
@@ -112,6 +115,12 @@ void PuzzleLogic::onRedoButtonPress()
     handleTilesMove(oldPos, newPos);
 }
 
+void PuzzleLogic::onHintButtonPress()
+{
+    m_gameData->m_hints++;
+    emit hintCountChange(m_gameData->m_hints);
+}
+
 void PuzzleLogic::timerEvent(QTimerEvent *event)
 {
     m_gameData->m_time++;
@@ -152,4 +161,5 @@ void PuzzleLogic::setupConnections() const
     connect(this, &PuzzleLogic::canUndoMove, currentGame, &GameWindow::setUndoButtonEnabled);
     connect(this, &PuzzleLogic::canRedoMove, currentGame, &GameWindow::setRedoButtonEnabled);
     connect(this, &PuzzleLogic::timerChange, currentGame, &GameWindow::updateTimer);
+    connect(this, &PuzzleLogic::hintCountChange, currentGame, &GameWindow::updateHintsCount);
 }
